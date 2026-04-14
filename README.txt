@@ -1,0 +1,1 @@
+Abra o BridgerFisch, ele é o macro
