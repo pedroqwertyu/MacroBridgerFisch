@@ -27,7 +27,7 @@ O projeto conta com uma **Interface (HUD)** elegante e flutuante para que você 
 ## ⚙️ Pré-requisitos e Recomendações
 Para o funcionamento perfeito do macro, siga estas diretrizes:
 
-###Configuração In-game:
+### Configuração In-game:
 * **Vara de Pesca:** Deve estar no slot **'9'**.
 * **Isca (Bait):** Deve estar no slot **'0'**.
 * **Gráficos:** Mantenha o gráfico em **3 ou menos**.
