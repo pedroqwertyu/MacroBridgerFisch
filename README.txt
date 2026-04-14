@@ -1,1 +1,1 @@
-Abra o BridgerFisch, ele é o macro
+## Baixe os dois arquivos e deixe na mesma pasta, depois abra só o BridgerFisch
