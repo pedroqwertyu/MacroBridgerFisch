@@ -45,4 +45,4 @@ Para o funcionamento perfeito do macro, siga estas diretrizes:
 3.  Execute o script.
 4.  No jogo, utilize os atalhos:
     * **`F1`**: Liga/Desliga o Macro (Toggle).
-    * **`F2`**: Reinicia o script ou sai com segurança.
+    * **`F2`**: desliga o script.
