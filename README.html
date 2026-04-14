@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bridger Autofisch — README</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:       #080a0c;
+    --surface:  #0d1117;
+    --border:   #1a2332;
+    --green:    #00ff4c;
+    --red:      #ff5f5f;
+    --blue:     #4a9eff;
+    --muted:    #3a4a5c;
+    --text:     #c8d6e5;
+    --dim:      #566879;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,255,76,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,255,76,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrap {
+    position: relative;
+    z-index: 1;
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 60px 24px 80px;
+  }
+
+  /* ── HEADER ── */
+  header {
+    border-left: 3px solid var(--green);
+    padding-left: 20px;
+    margin-bottom: 56px;
+  }
+
+  .tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--green);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    opacity: 0.7;
+  }
+
+  h1 {
+    font-size: 48px;
+    font-weight: 700;
+    letter-spacing: -1px;
+    color: #fff;
+    line-height: 1;
+  }
+
+  h1 span {
+    color: var(--green);
+  }
+
+  .sub {
+    margin-top: 10px;
+    font-size: 15px;
+    color: var(--dim);
+    font-family: 'Share Tech Mono', monospace;
+  }
+
+  .badges {
+    display: flex;
+    gap: 8px;
+    margin-top: 18px;
+    flex-wrap: wrap;
+  }
+
+  .badge {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 2px;
+    letter-spacing: 1px;
+  }
+
+  .badge-green { background: rgba(0,255,76,0.1); color: var(--green); border: 1px solid rgba(0,255,76,0.2); }
+  .badge-blue  { background: rgba(74,158,255,0.1); color: var(--blue); border: 1px solid rgba(74,158,255,0.2); }
+  .badge-red   { background: rgba(255,95,95,0.1); color: var(--red); border: 1px solid rgba(255,95,95,0.2); }
+
+  /* ── AVISO ── */
+  .alert {
+    background: rgba(255,95,95,0.06);
+    border: 1px solid rgba(255,95,95,0.2);
+    border-left: 3px solid var(--red);
+    border-radius: 4px;
+    padding: 16px 20px;
+    margin-bottom: 48px;
+  }
+
+  .alert-title {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--red);
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+  }
+
+  .alert ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .alert li {
+    font-size: 14px;
+    color: #c8d6e5;
+    padding-left: 16px;
+    position: relative;
+  }
+
+  .alert li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--red);
+    opacity: 0.5;
+  }
+
+  /* ── SEÇÕES ── */
+  section {
+    margin-bottom: 48px;
+  }
+
+  h2 {
+    font-size: 11px;
+    font-family: 'Share Tech Mono', monospace;
+    color: var(--green);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  h2::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── STEPS ── */
+  .steps {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .step {
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    gap: 16px;
+    align-items: start;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .step:last-child { border-bottom: none; }
+
+  .step-num {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    padding-top: 2px;
+  }
+
+  .step-body strong {
+    display: block;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 3px;
+  }
+
+  .step-body p {
+    font-size: 14px;
+    color: var(--dim);
+  }
+
+  /* ── HOTKEYS ── */
+  .hotkeys {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .hotkey {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hotkey:last-child { border-bottom: none; }
+
+  kbd {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-bottom: 2px solid var(--muted);
+    border-radius: 4px;
+    padding: 4px 12px;
+    color: #fff;
+    min-width: 80px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .hotkey-desc {
+    font-size: 14px;
+    color: var(--text);
+  }
+
+  .hotkey-desc span {
+    color: var(--dim);
+    font-size: 13px;
+  }
+
+  /* ── FLOW ── */
+  .flow {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .flow-item {
+    display: flex;
+    gap: 16px;
+    align-items: stretch;
+  }
+
+  .flow-line {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 20px;
+    flex-shrink: 0;
+  }
+
+  .flow-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--green);
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+
+  .flow-connector {
+    flex: 1;
+    width: 1px;
+    background: var(--border);
+    margin: 2px 0;
+  }
+
+  .flow-item:last-child .flow-connector { display: none; }
+
+  .flow-content {
+    padding: 4px 0 16px;
+  }
+
+  .flow-content strong {
+    display: block;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .flow-content p {
+    font-size: 13px;
+    color: var(--dim);
+    margin-top: 2px;
+  }
+
+  /* ── DEPENDÊNCIAS ── */
+  .deps {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .dep {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 14px 16px;
+  }
+
+  .dep-name {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+    color: var(--blue);
+    margin-bottom: 4px;
+  }
+
+  .dep-desc {
+    font-size: 13px;
+    color: var(--dim);
+  }
+
+  /* ── HUD ── */
+  .hud-preview {
+    background: #0f0f0f;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 14px;
+    width: 210px;
+    font-family: 'Share Tech Mono', monospace;
+  }
+
+  .hud-title {
+    font-size: 10px;
+    color: #666;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  .hud-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    margin-bottom: 8px;
+  }
+
+  .hud-label { color: #fff; }
+  .hud-off   { color: var(--red); }
+  .hud-on    { color: var(--green); }
+
+  .hud-footer {
+    font-size: 9px;
+    color: #333;
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    margin-top: 64px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-brand {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .footer-brand span { color: var(--green); }
+
+  .footer-note {
+    font-size: 12px;
+    color: var(--muted);
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HEADER -->
+  <header>
+    <p class="tag">AutoHotkey v2.0 · Macro</p>
+    <h1>Bridger <span>Autofisch</span></h1>
+    <p class="sub">by pororoca</p>
+    <div class="badges">
+      <span class="badge badge-green">AHK v2.0</span>
+      <span class="badge badge-blue">FindText</span>
+      <span class="badge badge-blue">PixelSearch</span>
+      <span class="badge badge-red">USE POR SUA CONTA E RISCO</span>
+    </div>
+  </header>
+
+  <!-- AVISO -->
+  <div class="alert">
+    <p class="alert-title">⚠ ANTES DE USAR — LEIA ISSO</p>
+    <ul>
+      <li>Coloque sua vara de pescar no slot <strong>9</strong></li>
+      <li>Coloque sua isca (bait) no slot <strong>0</strong></li>
+      <li>Olhe diretamente para a água antes de ativar</li>
+      <li>Evite pescar com o gráfico acima de 3</li>
+      <li>Evite pescar em lugares altos ou com muito relevo</li>
+      <li>Evite locais sem espaço suficiente ao redor</li>
+    </ul>
+  </div>
+
+  <!-- DEPENDÊNCIAS -->
+  <section>
+    <h2>Dependências</h2>
+    <div class="deps">
+      <div class="dep">
+        <p class="dep-name">AutoHotkey v2.0</p>
+        <p class="dep-desc">Runtime necessário para executar o script</p>
+      </div>
+      <div class="dep">
+        <p class="dep-name">FindText.ahk</p>
+        <p class="dep-desc">Biblioteca de reconhecimento visual de texto/imagem na tela</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- INSTALAÇÃO -->
+  <section>
+    <h2>Como usar</h2>
+    <div class="steps">
+      <div class="step">
+        <span class="step-num">01</span>
+        <div class="step-body">
+          <strong>Instale o AutoHotkey v2.0</strong>
+          <p>Baixe em autohotkey.com e instale normalmente.</p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step-num">02</span>
+        <div class="step-body">
+          <strong>Coloque o FindText.ahk na mesma pasta</strong>
+          <p>O arquivo FindText.ahk deve estar junto com o script principal.</p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step-num">03</span>
+        <div class="step-body">
+          <strong>Configure os slots no jogo</strong>
+          <p>Slot 9 → Vara de pescar &nbsp;·&nbsp; Slot 0 → Isca (bait)</p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step-num">04</span>
+        <div class="step-body">
+          <strong>Execute o script com o jogo aberto</strong>
+          <p>Clique duas vezes no .ahk ou rode via AutoHotkey. O HUD aparecerá no centro da tela.</p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step-num">05</span>
+        <div class="step-body">
+          <strong>Posicione o personagem e ative</strong>
+          <p>Olhe para a água, pressione F1 e o macro começa a pescar automaticamente.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOTKEYS -->
+  <section>
+    <h2>Controles</h2>
+    <div class="hotkeys">
+      <div class="hotkey">
+        <kbd>F1</kbd>
+        <div class="hotkey-desc">
+          Ativar / Desativar o macro
+          <br><span>O HUD mostra o estado atual em verde (ATIVO) ou vermelho (DESLIGADO)</span>
+        </div>
+      </div>
+      <div class="hotkey">
+        <kbd>F2</kbd>
+        <div class="hotkey-desc">
+          Recarregar o script
+          <br><span>Reinicia o macro do zero, útil se travar</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FLUXO -->
+  <section>
+    <h2>O que o macro faz</h2>
+    <div class="flow">
+      <div class="flow-item">
+        <div class="flow-line"><div class="flow-dot"></div><div class="flow-connector"></div></div>
+        <div class="flow-content">
+          <strong>Prepara a vara</strong>
+          <p>Abre o inventário, equipa a vara e posiciona a câmera olhando para a água.</p>
+        </div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-line"><div class="flow-dot"></div><div class="flow-connector"></div></div>
+        <div class="flow-content">
+          <strong>Lança a isca</strong>
+          <p>Equipa a bait, clica para lançar e aguarda a bolinha vermelha aparecer na água.</p>
+        </div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-line"><div class="flow-dot"></div><div class="flow-connector"></div></div>
+        <div class="flow-content">
+          <strong>Detecta o peixe</strong>
+          <p>Monitora a região da bolinha via PixelSearch. Quando o peixe morde, clica automaticamente para puxar.</p>
+        </div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-line"><div class="flow-dot"></div><div class="flow-connector"></div></div>
+        <div class="flow-content">
+          <strong>Minigame de teclas</strong>
+          <p>Usa FindText para detectar e pressionar as teclas F, G, R, T que aparecem na tela durante o minigame.</p>
+        </div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-line"><div class="flow-dot"></div><div class="flow-connector"></div></div>
+        <div class="flow-content">
+          <strong>Detecta baú raro</strong>
+          <p>Se um baú aparecer após o minigame, o macro se move até ele, interage e abre automaticamente.</p>
+        </div>
+      </div>
+      <div class="flow-item">
+        <div class="flow-line"><div class="flow-dot"></div></div>
+        <div class="flow-content">
+          <strong>Repete o ciclo</strong>
+          <p>Volta ao início e pesca novamente enquanto o macro estiver ATIVO.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HUD -->
+  <section>
+    <h2>HUD</h2>
+    <div style="display:flex; gap:32px; align-items:flex-start; flex-wrap:wrap;">
+      <div>
+        <div class="hud-preview">
+          <p class="hud-title">Bridger Autofisch by pororoca</p>
+          <div class="hud-row">
+            <span class="hud-label">Estado:</span>
+            <span class="hud-off">DESLIGADO</span>
+          </div>
+          <p class="hud-footer">F1 Toggle  ·  F2 Sair</p>
+        </div>
+        <p style="font-size:12px;color:var(--dim);margin-top:8px;font-family:'Share Tech Mono',monospace;">Estado desligado</p>
+      </div>
+      <div>
+        <div class="hud-preview">
+          <p class="hud-title">Bridger Autofisch by pororoca</p>
+          <div class="hud-row">
+            <span class="hud-label">Estado:</span>
+            <span class="hud-on">ATIVO</span>
+          </div>
+          <p class="hud-footer">F1 Toggle  ·  F2 Sair</p>
+        </div>
+        <p style="font-size:12px;color:var(--dim);margin-top:8px;font-family:'Share Tech Mono',monospace;">Estado ativo</p>
+      </div>
+    </div>
+    <p style="font-size:13px;color:var(--dim);margin-top:16px;">O HUD pode ser arrastado para qualquer posição da tela clicando e segurando.</p>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p class="footer-brand">Bridger <span>Autofisch</span> by pororoca</p>
+    <p class="footer-note">AutoHotkey v2.0</p>
+  </footer>
+
+</div>
+</body>
+</html>
