@@ -205,5 +205,5 @@ PegarNaVara() {
 }
 
 F2:: {
-    Reload
+    ExitApp
 }
