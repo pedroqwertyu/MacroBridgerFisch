@@ -2,26 +2,57 @@
 #Requires AutoHotkey v2.0
 
 FindText(, , 0)
-MsgBox "Atenção, bote sua vara no '9', a bait no '0' e olhe para a agua quando for pescar. `nEVITE: `n- pescar com o gráfico acima de 3. `n- pescar em lugares altos. `n- pescar lugares sem muito espaço e/ou muito relevo."
+MsgBox "Atenção, bote sua vara no '9', a bait no '0' e olhe para a agua quando for pescar. `nEVITE: `n- jogar acima de 60 fps`n- pescar com o gráfico acima de 3. `n- pescar em lugares altos. `n- pescar lugares sem muito espaço e/ou muito relevo."
+
+global modoAtual := "auto"
 
 global HUD := Gui("-Caption +ToolWindow +AlwaysOnTop")
 HUD.BackColor := "0F0F0F"
 
+; Título
 HUD.SetFont("s8 w400 c666666", "Consolas")
-HUD.Add("Text", "x14 y13 w185 Center", "Bridger Autofisch by pororoca")
+HUD.Add("Text", "x0 y10 w210 Center", "Bridger Autofisch by pororoca")
 
-HUD.SetFont("s8 w400 cffffff", "Consolas")
-HUD.Add("Text", "x14 y36", "Estado: ")
-HUD.SetFont("s8 w400 cFF5F5F", "Consolas")
-HUD.Add("Text", "x120 y36 w79 Right vStatusText", "DESLIGADO")
+; --- Modos (coluna esquerda) ---
+HUD.SetFont("s8 w400 c00ff4c", "Consolas")
+HUD.Add("Text", "x14 y35 vModoAuto", "◉ Full Auto").OnEvent("Click", (*) => SelecionarModo("auto"))
 
+HUD.SetFont("s8 w400 c666666", "Consolas")
+HUD.Add("Text", "x14 y53 w90 vModoMinigame", "○ Minigame").OnEvent("Click", (*) => SelecionarModo("minigame"))
+
+HUD.SetFont("s8 w400 c666666", "Consolas")
+HUD.Add("Text", "x14 y71 w90 vModoAutoclick", "○ Autoclick").OnEvent("Click", (*) => SelecionarModo("autoclick"))
+
+; --- Estado (coluna direita) ---
+HUD.SetFont("s8 w700 cffffff", "Consolas")
+HUD.Add("Text", "x157 y35", "Estado:")
+
+HUD.SetFont("s8 w700 cFF5F5F", "Consolas")
+HUD.Add("Text", "x115 y53 w81 Right vStatusText", "DESLIGADO")
+
+; --- Rodapé ---
 HUD.SetFont("s7 w400 c333333", "Consolas")
-HUD.Add("Text", "x14 y72 w185 Center", "F1 Toggle  ·  F2 Sair")
+HUD.Add("Text", "x0 y97 w210 Center", "F1 Toggle  ·  F2 Sair")
 
-HUD.Show("w210 h100 x" . ((A_ScreenWidth/2) - 110) . " y" . ((A_ScreenHeight/2) - 70) . " NoActivate")
+; --- Funções ---
+SelecionarModo(modo) {
+    global modoAtual
+    modoAtual := modo
+
+    HUD["ModoAuto"].SetFont(modo = "auto" ? "s8 w400 c00ff4c" : "s8 w400 c666666", "Consolas")
+    HUD["ModoAuto"].Text := modo = "auto" ? "◉ Full Auto" : "○ Full Auto"
+
+    HUD["ModoMinigame"].SetFont(modo = "minigame" ? "s8 w400 c00ff4c" : "s8 w400 c666666", "Consolas")
+    HUD["ModoMinigame"].Text := modo = "minigame" ? "◉ Minigame" : "○ Minigame"
+
+    HUD["ModoAutoclick"].SetFont(modo = "autoclick" ? "s8 w400 c00ff4c" : "s8 w400 c666666", "Consolas")
+    HUD["ModoAutoclick"].Text := modo = "autoclick" ? "◉ Autoclick" : "○ Autoclick"
+}
+
+; --- Exibição e arraste ---
+HUD.Show("w210 h120 x" . ((A_ScreenWidth / 2) - 105) . " y" . ((A_ScreenHeight / 2) - 54) . " NoActivate")
 
 OnMessage(0x0201, WM_LBUTTONDOWN)
-
 WM_LBUTTONDOWN(wParam, lParam, msg, hwnd) {
     PostMessage(0xA1, 2, , , HUD.Hwnd)
 }
@@ -40,7 +71,6 @@ global teclaT :=
     global hexBolinha := [0xD92827, 0x5C0503, 0xFF2D2D]
     global hexTextoCaixa := [0x4a86bc, 0x2c679d, 0x265287]
     global hexCaixa := [0x201714]
-    ; 966 330 201714 975 171
     
 global teclas := Map(
     "f", teclaF,
@@ -52,18 +82,29 @@ global teclas := Map(
 global ativo := false
 
 F1:: {
-    global ativo
+    global ativo, modoAtual
     ativo := !ativo
     HUD["StatusText"].Text := ativo ? "ATIVO" : "DESLIGADO"
     HUD["StatusText"].Opt(ativo ? "c00ff4c" : "cFF5F5F")
 
     if ativo {
-        SetTimer(Main, 20)
+        if modoAtual = "auto"
+            SetTimer(Main, 20)
+        else if modoAtual = "minigame"
+            SetTimer(ChecarMinigame.Bind(offSetRange), 20)
+        else if modoAtual = "autoclick"
+            SetTimer(Autoclick, 20)
     } else {
         SetTimer(Main, 0)
+        SetTimer(ChecarMinigame.Bind(offSetRange), 0)
+        SetTimer(Autoclick, 0)
         ToolTip("")
     }
+}
 
+Autoclick(){
+    Click
+    Sleep 200
 }
 
 Main() {
@@ -98,8 +139,9 @@ Main() {
                         acharBau := ChecarItem(966,340,1,10,hexCaixa)
                         if acharBau = false{
                             Send "{w down}"
-                            Sleep 100
+                            Sleep 50
                             Send "{w up}"
+                            Sleep 50
                         } else{
                             ToolTip("Achou bau")
                             Sleep 700
