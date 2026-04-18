@@ -1,4 +1,4 @@
-# 🎣 Bridger Autofisch v2.2
+# 🎣 Bridger Autofisch v2.3
 
 <p align="center">
   <img src="https://img.shields.io/badge/Script-AutoHotkey_v2.0-red?style=for-the-badge&logo=autohotkey&logoColor=white" alt="AHK v2.0">
