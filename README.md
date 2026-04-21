@@ -22,7 +22,7 @@ O projeto conta com uma **Interface (HUD)** elegante e flutuante para que você 
 
 ---
 
-## ⚙️ Pré-requisitos e Recomendações
+## Pré-requisitos e Recomendações
 Para o funcionamento perfeito do macro, siga estas diretrizes:
 
 ### Configuração In-game:
