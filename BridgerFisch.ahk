@@ -2,7 +2,7 @@
 #Requires AutoHotkey v2.0
 
 FindText(, , 0)
-MsgBox "Atenção, bote sua vara no '9', a bait no '0' e olhe para a agua quando for pescar. `nEVITE: `n- jogar acima de 60 fps`n- pescar com o gráfico acima de 3. `n- pescar em lugares altos. `n- pescar lugares sem muito espaço e/ou muito relevo."
+MsgBox "ATENÇÂO, bote sua vara no '9', a bait no '0' e olhe para a água quando for pescar. `nEVITE: `n- jogar acima de 60 fps`n- pescar com o gráfico abaixo de 3. `n- pescar em lugares altos. `n- pescar lugares sem muito espaço e/ou muito relevo."
 
 global modoAtual := "auto"
 
@@ -67,11 +67,12 @@ global teclaR :=
     "|<>**50$42.0000000Dzzz000Tzzzy00M000DU0S0001s0C0000Q020000C020zz06020w7k3020U0s3020U0Q1030U0A1U30U061U30U061U31U061U31U061U31U061U31U061U31U061U31U0A1U31U0A1031U0s3031U7k3031zz06031zk0A031U00Q031k01k031s0DU031s3y0031g1U0031a0k0031X0s0031VUA0031VkC0031Us70031UM30030UA1U030UC0k030U60M020U30A020U1UC020U1U7020U0k3U20k0M1U20k0M0kC0y0w0SQ0C0k0CM060U02Tzy0zzy0000000U"
 global teclaT :=
     "|<>**50$39.0000003k0000QP00006XTw01zoNzzzzwn000006M00000n000006M00000n3zUDy6Pzw1zynM0U80qS04102nk0U80S004100000kM00006300000kM00006300000kM00006300000kM00006300000kM00006300000kM00006300000kM00006300000kM00006300000kM00006300000kM00006300000kM00006300000kM00006300000U800004100000U800004100000U800004100000U8000041U000DUDU001k0Q000A01U001zzw00000000U"
-    global hexPeixe := [0x001519, 0x49A8B7, 0x468699, 0x4E898C, 0x438188, 0x477B82, 0x5AA8B2, 0x48908C, 0x1d4b4f]
-    global hexBolinha := [0xD92827, 0x5C0503, 0xFF2D2D]
-    global hexTextoCaixa := [0x4a86bc, 0x2c679d, 0x265287]
-    global hexCaixa := [0x201714]
-    
+global teclaE := "|<>**60$30.7zzzsC000QM0006lzzzXnU01na000NY0009Y0009Y0009Y0009Y0009Y0zU9Y0UU9Y0jU9Y0jU9Y0UU9Y0jU9Y0g09Y0jU9Y0UU9Y0zU9Y0009Y0009Y000Na000NX001lVzzzVk0003k0003M0006C000Q7zzzkU"
+global hexPeixe := [0x001519, 0x49A8B7, 0x468699, 0x4E898C, 0x438188, 0x477B82, 0x5AA8B2, 0x48908C, 0x1d4b4f, 0x154d4b]
+global hexBolinha := [0xD92827, 0x5C0503, 0xFF2D2D]
+global hexTextoCaixa := [0x4a86bc, 0x2c679d, 0x265287]
+global hexCaixa := [0x201714, 0x967A72, 0x886E65, 0x24201C, 0x1D1613]
+
 global teclas := Map(
     "f", teclaF,
     "g", teclaG,
@@ -102,8 +103,8 @@ F1:: {
     }
 }
 
-Autoclick(){
-    Click
+Autoclick() {
+    Click 
     Sleep 200
 }
 
@@ -117,32 +118,39 @@ Main() {
         Sleep(400)
         minigameApareceu := ChecarMinigame(offSetRange)
         if minigameApareceu = true {
-            iniciouMinigame := A_TickCount
+            ultimoTrue := A_TickCount
             ToolTip("Fazendo o minigame das teclas...")
+
             loop {
-                ChecarMinigame(offSetRange)
-                Sleep(50)
-                if A_TickCount - iniciouMinigame >= 4000 {
+                resultado := ChecarMinigame(offSetRange)
+                if resultado {
+                    ultimoTrue := A_TickCount  ; reinicia o contador quando achar
+                }
+                if A_TickCount - ultimoTrue >= 1000 {
                     ToolTip("terminado")
                     break
                 }
             }
+
             iniciouContagem := A_TickCount
             loop {
-                pegouBau := ChecarItem(975,171,offSetRange,5,hexTextoCaixa)
-                if pegouBau = true{
+                pegouBau := ChecarItem(975, 171, offSetRange, 5, hexTextoCaixa)
+                if pegouBau = true {
                     ToolTip("Pegou um baú")
+                    Sleep 500
                     Send "{Control}"
+                    Sleep 500
                     Send "{Control}"
+                    Sleep 500
                     MouseMove(0, -350, 0, "R")
                     loop {
-                        acharBau := ChecarItem(966,340,1,10,hexCaixa)
-                        if acharBau = false{
+                        acharBau := FindText(&X, &Y, 899-150000, 130-150000, 899+150000, 130+150000, 0, 0, teclaE)
+                        if !acharBau {
                             Send "{w down}"
                             Sleep 50
                             Send "{w up}"
                             Sleep 50
-                        } else{
+                        } else {
                             ToolTip("Achou bau")
                             Sleep 700
                             Send "{e down}"
@@ -153,7 +161,7 @@ Main() {
                     }
                     break
                 }
-                if A_TickCount - iniciouContagem >= 1000{
+                if A_TickCount - iniciouContagem >= 1000 {
                     ToolTip("Pegou um item raro")
                     break
                 }
@@ -162,8 +170,8 @@ Main() {
     }
 }
 
-
 Pescar() {
+    global ativo
     Send 0
     Click
     Sleep(300)
@@ -173,21 +181,23 @@ Pescar() {
     sleep(1500)
     inicioBolinha := A_TickCount
     loop {
-        bolinhaApareceu := ChecarItem(975,171,offSetRange,20,hexBolinha)
+        bolinhaApareceu := ChecarItem(975, 171, offSetRange, 20, hexBolinha)
         if bolinhaApareceu = true {
             ToolTip("Pescando...")
             break
         }
         if A_TickCount - inicioBolinha >= 2000 {
             MouseMove(5, 5, , "R")
-            ToolTip("Bugou, pera aí")
+            if ativo{
+                ToolTip("Bugou, pera aí")
+            }
             return
         }
     }
     Sleep(500)
     inicio := A_TickCount
     loop {
-        peixeApareceu := ChecarItem(975,171,(offSetRange+20), 4, hexPeixe)
+        peixeApareceu := ChecarItem(975, 171, (offSetRange + 20), 4, hexPeixe)
         if peixeApareceu && A_TickCount - inicio >= 4000 {
             ToolTip("Peixe foi achado")
             Sleep(700)
@@ -206,7 +216,8 @@ Pescar() {
 ChecarItem(pontoX, pontoY, offSet, tolerancia, array) {
 
     for _, cor in array {
-        encontrou := PixelSearch(&px, &py, pontoX - offSet, pontoY - offSet, pontoX + offSet, pontoy + offSet, cor, tolerancia)
+        encontrou := PixelSearch(&px, &py, pontoX - offSet, pontoY - offSet, pontoX + offSet, pontoy + offSet, cor,
+            tolerancia)
         if encontrou {
             return true
         }
@@ -232,7 +243,7 @@ PegarNaVara() {
     sleep 1400
     Send "{i Up}"
     Send "{o Down}"
-    sleep 500
+    sleep 600
     Send "{o Up}"
     Send "{Control}"
     MouseGetPos(&xPos, &yPos)
